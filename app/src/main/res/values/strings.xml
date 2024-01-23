@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">City Guide</string>
+    <string name="restaurant">Restaurants</string>
+    <string name="gym">Gyms</string>
+    <string name="cafe">Cafes</string>
+    <string name="kid">Kid Friendly</string>
+    <string name="park">Parks</string>
+    <string name="shop">Shopping</string>
+
+
 </resources>
