@@ -1,3 +1,162 @@
 <resources>
     <string name="app_name">City Guide</string>
+    <string name="restaurant">Restaurants</string>
+    <string name="gym">Gyms</string>
+    <string name="cafe">Cafes</string>
+    <string name="kid">Kid Friendly</string>
+    <string name="park">Parks</string>
+    <string name="shop">Shopping</string>
+
+    <string name="craven">Craven SPORT services Training Centre</string>
+    <string name="cravenadd">632 1st Ave N #10, Saskatoon, SK S7K 1X8</string>
+    <string name="cravendesc">A great gym that offers multiple programs with a professional and friendly staff.
+    Has multiple zones that allow you to have all your equipment in one spot.\n
+    Offers physiotherapy and post injury rehab.</string>
+
+    <string name="ymca">YMCA Saskatoon</string>
+    <string name="ymcaadd">25 22 St E, Saskatoon, SK S7K 0C7</string>
+    <string name="ymcadesc">Community-focused nonprofit established in 1844 with recreational programs &amp; services for all ages.
+    Has plenty of facilities such as a pool and a weight room.\n
+    Kid friendly</string>
+
+    <string name="iron">Iron Works Gym</string>
+    <string name="ironadd"> 2105 8 St E #30, Saskatoon, SK S7H 0T8</string>
+    <string name="irondesc">A real classic old school gym. A spacious gym with a wide selection of free weights,
+    Olympic lifting platforms, powerlifting platforms, mono-lift, competition bench and a cardio area.\n
+    Comes with chalk</string>
+
+    <string name="focus">Fitness Focus</string>
+    <string name="focusadd">1250 Ontario Ave, Saskatoon, SK S7K 1S5</string>
+    <string name="focusdesc">A humble no contract gym that\'s been around since 2002. This gym has a lot of equipment and is very welcoming,
+    a place to really focus on your workouts.</string>
+
+    <string name="motion">Motion Fitness</string>
+    <string name="motionadd"> 3110 Clarence Ave S, Saskatoon, SK S7T 0C9/ 153 Gibson Bnd, Saskatoon, SK S7V 0P1/ 134 Primrose Dr, Saskatoon, SK S7K 5S6/
+        320 Shillington Cres, Saskatoon, SK S7M 1L2</string>
+    <string name="motiondesc">A chain gym with all your fitness needs.
+    Since it has multiple locations it\'s perfect for a quick workout on the go.\n
+    One membership is good for all locations.</string>
+
+    <string name="gofor">Go For Sushi Buffet</string>
+    <string name="goforadd">2105 8 St E, Saskatoon, SK S7H 0T8</string>
+    <string name="gofordesc">A great place to get all you can eat sushi!
+    With a great selection of nigiris, rolls, and tempura this place has it all.\n
+    Make sure to order 20 shrimp tempuras!</string>
+
+    <string name="thirteen">Thirteen Pies Pizza + Bar</string>
+    <string name="thirteenadd">165 3 Ave S, Saskatoon, SK S7K 1L8</string>
+    <string name="thirteendesc">Modern restaurant fixing up Brooklyn-style pies
+        in a hip space with murals, booths &amp; a cocktail bar. Perfect for a
+        pizza during the night out.\n
+        The Friday is a great pizza with spice.</string>
+
+    <string name="fuh">Fuh Station 1</string>
+    <string name="fuhadd">1806 Idylwyld Dr N, Saskatoon, SK S7L 1B5</string>
+    <string name="fuhdesc">A nice vietnamese restaurant located in a gas station.
+        Don\'t let the setting fool you, this place serves amazing vietnamese food at a cheap price.\n
+        Has a kid friendly menu.</string>
+
+    <string name="cut">Cut Casual Steak &amp; Tap</string>
+    <string name="cutadd"> 416 21st St E, Saskatoon, SK S7K 0C2</string>
+    <string name="cutdesc">Contemporary venue offering steaks, chops &amp; seafood &amp; a basement lounge for drinks &amp;
+        casual dining.</string>
+
+    <string name="laspalapas">Las Palapas Resort Grill</string>
+    <string name="laspalapasadd">910 Victoria Ave, Saskatoon, SK S7N 0Z6</string>
+    <string name="laspalapasdesc">Colourful hangout with a tropical vibe serving eclectic Pan-Latin &amp; Caribbean fare, plus drinks.</string>
+
+    <string name="city_perks">City Perks Coffeehouse</string>
+    <string name="city_perksadd">801 7 Ave N, Saskatoon, SK S7K 2V5</string>
+    <string name="city_perksdesc">Cozy, family-owned cafe pouring rotating single origin coffees, with baked goods &amp; sandwiches.</string>
+
+    <string name="sparrow">Sparrow Coffee</string>
+    <string name="sparrowadd">536 2nd Ave N #120, Saskatoon, SK S7K 2C5</string>
+    <string name="sparrowdesc">Nice bright clean family run coffee shop located at 2nd ave.\n
+    Offers a variety of fresh food.</string>
+
+    <string name="christies">Christies Mayfair Bakery Ltd</string>
+    <string name="christiesadd">420 33rd St W, Saskatoon, SK S7L 0V6</string>
+    <string name="christiesdesc">An authentic local bakery that sells coffee in 33rd.
+        The coffee is great but the sandwiches are the real highlight of this location.\n
+        They sell delicious pastries and breads as well</string>
+
+    <string name="museo">Museo Coffee Roasters</string>
+    <string name="museoadd"> 730 Broadway Ave, Saskatoon, SK S7N 1B4</string>
+    <string name="museodesc">Excellent spot for singularly sourced coffee. An old space
+        with a lot of character.\n
+        Offers 5G internet.</string>
+
+    <string name="drift">Drift Sidewalk Cafe &amp; Vista Lounge</string>
+    <string name="driftadd">339 Ave A S, Saskatoon, SK S7M 1L7</string>
+    <string name="driftdesc">A modern daytime cafe that offers classic cafe dishes in a stylish,
+        airy interior.\n
+        Offers excellent patio seating</string>
+
+    <string name="kiwanis">Kiwanis Memorial Park</string>
+    <string name="kiwanisadd">500 Spadina Crescent E, Saskatoon, SK S7K 3G8</string>
+    <string name="kiwanisdesc">Nice area to walk, bike, run, boat, or sit and enjoy the day.\n
+    Make sure to visit taste of Saskatchewan held here every year for good eats!</string>
+
+    <string name="meewasin">Meewasin Park</string>
+    <string name="meewasinadd">2703 Spadina Crescent E, Saskatoon, SK S7K 6P7</string>
+    <string name="meewasindesc">Natural parkland offering hiking trails, sculptures, grassy areas &amp; picnic facilities by the river.</string>
+
+    <string name="victoria">Victoria Park</string>
+    <string name="victoriaadd">meets Spadina Cres, Avenue F S, Saskatoon, SK</string>
+    <string name="victoriadesc">A nice large spacious park right beside the river. Has benches, climbing structure, saucer swings, and a nearby barbecue area.\n
+    Great for dogs.</string>
+
+    <string name="silverwood">Silverwood Dog Park</string>
+    <string name="silverwoodadd"> Northeast of Silverwood Golf Course and south along river, Kinnear Ave, Saskatoon, SK S7P 0B7</string>
+    <string name="silverwooddesc">Large dog park right beside of Silverwood Golf Course. Lots of great natural trails and a place you can off leash.\n
+    Even has water fountains for dogs.</string>
+
+    <string name="zoofarm">Saskatoon Forestry Farm Park &amp; Zoo</string>
+    <string name="zoofarmadd">1903 Forestry Farm Park Dr, Saskatoon, SK S7S 1G9</string>
+    <string name="zoofarmdesc">The Forestry Farm Park and Zoo is a forested park and zoo located in Saskatoon, Saskatchewan, Canada. The park was originally established as the Dominion Forest Nursery Station and later Sutherland Forest Nursery Station.\n
+        Kid friendly.</string>
+
+    <string name="apex">Apex Adventure Plex Saskatoon</string>
+    <string name="apexadd">3910 Burron Ave, Saskatoon, SK S7P 0E3</string>
+    <string name="apexdesc">A fun park with lots of trampoline for some jumping fun! Staff is good cooperative. A good place to spend family quality time far from the hustle bustle of life. Different variety of jumping activities for kids and older as well.\n
+        Kid friendly.</string>
+
+    <string name="playland">Nutrien Playland at Kinsmen Park</string>
+    <string name="playlandadd">945 Spadina Crescent E, Saskatoon, SK S7K 3H6</string>
+    <string name="playlanddesc">Celebrate the magic of play at this fine Saskatoon attraction. Ride the vintage carousel and the Canpotex Train, soar high on the ferris wheel or run free in the water, sand and natural play area. Let moments become memories in the heart of Saskatoon.
+    </string>
+
+    <string name="western">Western Development Museum (WDM) - Saskatoon</string>
+    <string name="westernadd">2610 Lorne Ave, Saskatoon, SK S7J 0S6</string>
+    <string name="westerndesc">The Western Development Museum is the keeper of Saskatchewan’s collective heritage. The Museum shares the province’s unique sense of place with all people for their understanding and enjoyment – recognizing that the legacy of the past is the foundation for a sustainable future.</string>
+
+    <string name="lily">The Prairie Lily</string>
+    <string name="lilyadd">Box 255 RR#6 LCD Main, Saskatoon, SK S7K 3J9</string>
+    <string name="lilydesc">Exploring Saskatoon from the South Saskatchewan River is like discovering the city all over again.
+        Join us on The Prairie Lily for one of our many cruises through the Meewasin Valley and take in the beauty of our living river, our friendly city, and our expansive prairie sky.</string>
+
+    <string name="midtown">Midtown</string>
+    <string name="midtownadd">201 1 Ave S, Saskatoon, SK S7K 1J9</string>
+    <string name="midtowndesc">Spacious, updated shopping mall with fashion, cosmetics &amp; phone stores &amp; a popular food hall.</string>
+
+    <string name="centre">The Centre Mall</string>
+    <string name="centreadd">3310 8 St E, Saskatoon, SK S7H 0W6</string>
+    <string name="centredesc">
+        The Centre is a major shopping mall located south-east of the junction of Circle Drive and 8th Street in Saskatoon, Saskatchewan in the Wildwood neighbourhood.\n
+        Be sure to check out Rainbow Cinemas located in this mall.
+    </string>
+
+    <string name="lawson">Lawson Heights Mall</string>
+    <string name="lawsonadd">134 Primrose Dr, Saskatoon, SK S7K 5S6</string>
+    <string name="lawsondesc">Lawson Heights Mall is a shopping centre located at the junction of Warman Road and Primrose Drive in north Saskatoon, Saskatchewan in the Lawson Heights Suburban Centre neighbourhood. It is currently anchored by Canada Safeway and London Drugs, and has almost 100 shops and services.</string>
+
+    <string name="preston">Preston Crossing</string>
+    <string name="prestonadd"> Preston Ave N, Saskatoon, SK S7N 4V2</string>
+    <string name="prestondesc">This little strip mall has a many places to eat and places to get groceries and your everyday Necessities.\n
+    Easy parking.</string>
+
+    <string name="farmer">Saskatoon Farmers\' Market</string>
+    <string name="farmeradd">2600 Koyl Ave, Saskatoon, SK S7L 5X9</string>
+    <string name="farmerdesc">The Saskatoon Farmers\' Market is a profit, vendor-owned cooperative that operates year-round, twice-weekly Farmers\' market in Saskatoon, Saskatchewan, Canada.</string>
+
 </resources>
