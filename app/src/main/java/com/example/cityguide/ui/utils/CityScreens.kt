@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -95,8 +96,50 @@ private fun CityImageItem(city: City, modifier: Modifier = Modifier){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RecommendationListItem(){}
+private fun RecommendationListItem(
+    recommendation: Recommendation,
+    onItemClick: (Recommendation) -> Unit,
+    modifier: Modifier = Modifier
+){
+    Card(
+        elevation = CardDefaults.cardElevation(),
+        modifier = modifier,
+        shape = RoundedCornerShape(dimensionResource(R.dimen.card_corner_radius)),
+        onClick = {onItemClick(recommendation)}
+    ){
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .size(dimensionResource(id = R.dimen.card_image_height))
+        ){
+            RecommendationImageItem(
+                recommendation = recommendation,
+                modifier = Modifier.size(dimensionResource(id = R.dimen.card_image_height))
+            )
+            Spacer(Modifier.width(16.dp))
+            Column(modifier = Modifier
+                .padding(
+                    vertical = dimensionResource(R.dimen.padding_small),
+                    horizontal = dimensionResource(R.dimen.padding_medium)
+                )
+                .weight(1f)
+            ){
+                Text(
+                    text = stringResource(id = recommendation.nameRes),
+                    style = MaterialTheme.typography.displaySmall,
+                    modifier = Modifier.padding(bottom = dimensionResource(R.dimen.card_text_vertical_space))
+                )
+                Text(
+                    text = stringResource(id = recommendation.addressRes),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
+        }
+    }
+}
 
 @Composable
 private fun RecommendationImageItem(recommendation: Recommendation, modifier: Modifier = Modifier){
@@ -105,7 +148,7 @@ private fun RecommendationImageItem(recommendation: Recommendation, modifier: Mo
             painter = painterResource(id =  recommendation.imageRes),
             contentDescription = null,
             alignment = Alignment.Center,
-            contentScale = ContentScale.FillWidth
+            contentScale = ContentScale.Fit
             )
     }
 }
@@ -116,6 +159,17 @@ fun CityListItemPreview(){
     CityGuideTheme {
         CityListItem(
             city = CityRepository.defaultCity,
+            onItemClick = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun RecommendationListItemPreview(){
+    CityGuideTheme {
+        RecommendationListItem(
+            recommendation = CityRepository.defaultRecommendation,
             onItemClick = {}
         )
     }
