@@ -5,33 +5,45 @@ import com.example.cityguide.model.City
 import com.example.cityguide.model.Recommendation
 
 object CityRepository {
+    val defaultCity = getCategories()[0]
     val defaultRecommendationList = getRecommendationData()[0]
     val defaultRecommendation = getRecommendationData()[0][0]
 
     fun getCategories(): List<City> {
         return listOf(
             City(
+                id = 1,
                 nameRes = R.string.restaurant,
+                descriptionRes = R.string.restaurantdesc,
                 imageRes = R.drawable.image
             ),
             City(
+                id = 2,
                 nameRes = R.string.gym,
+                descriptionRes = R.string.gymdesc,
                 imageRes = R.drawable.gym_structure_1080x675
             ),
             City(
+                id = 3,
                 nameRes = R.string.cafe,
+                descriptionRes = R.string.cafedesc,
                 imageRes = R.drawable.coffee
             ),
             City(
+                id = 4,
                 nameRes = R.string.kid,
+                descriptionRes = R.string.kiddesc,
                 imageRes = R.drawable.kids_playing
             ),
             City(
+                id = 5,
                 nameRes = R.string.park,
+                descriptionRes = R.string.parkdesc,
                 imageRes = R.drawable.parks
             ),
-            City(
+            City(id = 6,
                 nameRes = R.string.shop,
+                descriptionRes = R.string.shopdesc,
                 imageRes = R.drawable.mall
             )
         )

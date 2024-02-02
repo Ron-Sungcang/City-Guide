@@ -1,11 +1,18 @@
 <resources>
     <string name="app_name">City Guide</string>
     <string name="restaurant">Restaurants</string>
+    <string name="restaurantdesc">From fancy steaks to a nice bowl of pho, Search for the best restaurants Saskatoon has to offer!</string>
     <string name="gym">Gyms</string>
+    <string name="gymdesc">Looking for a nice workout? Trainers and chain gyms, Saskatoon has everything you need for your workout needs.</string>
     <string name="cafe">Cafes</string>
+    <string name="cafedesc">Want to sip coffee at a nice patio? More into chic new interiors? Just want good coffee? Saskatoon has it all!</string>
     <string name="kid">Kid Friendly</string>
+    <string name="kiddesc">Family fun and more! Look for some great spots in Saskatoon to spend time with the kids!</string>
     <string name="park">Parks</string>
+    <string name="parkdesc">Saskatoon is home to some of the best parks in the province. Home to many great natural sceneries thanks to its rivers.</string>
     <string name="shop">Shopping</string>
+    <string name="shopdesc">From huge shopping malls to a quaint farmer\'s market, here are Saskatoon\'s best.</string>
+    <string name="back_button">Back</string>
 
     <string name="craven">Craven SPORT services Training Centre</string>
     <string name="cravenadd">632 1st Ave N #10, Saskatoon, SK S7K 1X8</string>

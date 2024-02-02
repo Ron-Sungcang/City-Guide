@@ -38,13 +38,19 @@ class CityViewModel: ViewModel() {
 
     fun navigateToListPage() {
         _uiState.update {
-            it.copy(isShowingListPage = true)
+            it.copy(
+                isShowingCityListPage = false,
+                isShowingRecommendationListPage = true
+            )
         }
     }
 
     fun navigateToDetailPage() {
         _uiState.update {
-            it.copy(isShowingListPage = false)
+            it.copy(
+                isShowingCityListPage = false,
+                isShowingRecommendationListPage = false
+                )
         }
     }
 
@@ -54,5 +60,6 @@ data class CityUiState(
     val categoryList: List<City> = emptyList(),
     val recommendationList: List<Recommendation> = CityRepository.defaultRecommendationList,
     val currentRecommendation: Recommendation = CityRepository.defaultRecommendation,
-    val isShowingListPage: Boolean = true
+    val isShowingCityListPage: Boolean = true,
+    val isShowingRecommendationListPage: Boolean = false
 )
