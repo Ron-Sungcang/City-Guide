@@ -16,12 +16,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +44,32 @@ import com.example.cityguide.model.City
 import com.example.cityguide.model.Recommendation
 import com.example.cityguide.ui.theme.CityGuideTheme
 import java.nio.file.WatchEvent
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CityAppBar(
+    onBackButtonClick:() -> Unit,
+    isShowingCityList: Boolean,
+    modifier: Modifier = Modifier
+){
+    TopAppBar(
+        title = { Text(text = stringResource(id = R.string.app_name))},
+        colors = TopAppBarDefaults.mediumTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
+        modifier = modifier,
+        navigationIcon = {
+            if(!isShowingCityList){
+                IconButton(onClick = onBackButtonClick) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back_button)
+                    )
+                }
+            }
+        }
+    )
+}
 
 @Composable
 private fun CityList(
