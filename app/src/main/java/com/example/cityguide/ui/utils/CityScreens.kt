@@ -1,12 +1,16 @@
 package com.example.cityguide.ui.utils
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,7 +19,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
@@ -34,9 +40,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -88,6 +98,9 @@ fun CityApp(
                     viewModel.updateCurrentRecommendation(it)
                     viewModel.navigateToDetailPage()
                 },
+                onBackButtonClick = {
+                    viewModel.navigateToCityListPage()
+                },
                 contentPadding = innerPadding,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -98,7 +111,11 @@ fun CityApp(
                     )
             )
         } else {
-
+            RecommendationDetails(
+                selectedRecommendation = uiState.currentRecommendation,
+                onBackButtonClick = {viewModel.navigateToListPage()},
+                contentPadding = innerPadding
+            )
         }
     }
 }
@@ -154,9 +171,13 @@ private fun CityList(
 private fun RecommendationList(
     recommendations: List<Recommendation>,
     onClick: (Recommendation) -> Unit,
+    onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ){
+    BackHandler {
+        onBackButtonClick
+    }
     LazyColumn(
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium)),
@@ -173,9 +194,75 @@ private fun RecommendationList(
 
 @Composable
 fun RecommendationDetails(
-
+    selectedRecommendation: Recommendation,
+    onBackButtonClick: () -> Unit,
+    contentPadding: PaddingValues,
+    modifier: Modifier = Modifier
 ){
-
+    BackHandler {
+        onBackButtonClick
+    }
+    val scrollState = rememberScrollState()
+    val layoutDirection = LocalLayoutDirection.current
+    Box(
+        modifier = modifier
+            .verticalScroll(state = scrollState)
+            .padding(top = contentPadding.calculateTopPadding())
+    ){
+        Column(
+            modifier = Modifier
+                .padding(
+                    bottom = contentPadding.calculateTopPadding(),
+                    start = contentPadding.calculateStartPadding(layoutDirection),
+                    end = contentPadding.calculateEndPadding(layoutDirection)
+                )
+        ) {
+            Box {
+                Box {
+                    Image(
+                        painter = painterResource(id = selectedRecommendation.imageRes),
+                        contentDescription = null,
+                        alignment = Alignment.TopCenter,
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                Column(
+                    Modifier
+                        .align(Alignment.BottomStart)
+                        .fillMaxWidth()
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(Color.Transparent, MaterialTheme.colorScheme.scrim),
+                                0f,
+                                400f
+                            )
+                        )
+                ){
+                    Text(
+                        text = stringResource(selectedRecommendation.nameRes),
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.inverseOnSurface,
+                        modifier = Modifier
+                            .padding(horizontal = dimensionResource(R.dimen.padding_small))
+                    )
+                    Text(
+                        text = stringResource(selectedRecommendation.addressRes),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.inverseOnSurface
+                    )
+                }
+            }
+            Text(
+                text = stringResource(selectedRecommendation.descriptionRes),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(
+                    vertical = dimensionResource(R.dimen.padding_detail_content_vertical),
+                    horizontal = dimensionResource(R.dimen.padding_detail_content_horizontal)
+                )
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -338,7 +425,22 @@ fun RecommendationListPreview(){
         Surface {
             RecommendationList(
                 recommendations = CityRepository.defaultRecommendationList,
-                onClick = {}
+                onClick = {},
+                onBackButtonClick = {}
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun previewRecommendedDetails(){
+    CityGuideTheme {
+        Surface {
+            RecommendationDetails(
+                selectedRecommendation = CityRepository.defaultRecommendation,
+                onBackButtonClick = {},
+                contentPadding = PaddingValues(0.dp)
             )
         }
     }

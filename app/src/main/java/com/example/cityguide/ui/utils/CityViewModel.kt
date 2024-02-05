@@ -45,6 +45,14 @@ class CityViewModel: ViewModel() {
             )
         }
     }
+    fun navigateToCityListPage(){
+        _uiState.update {
+            it.copy(
+                isShowingCityListPage = true,
+                isShowingRecommendationListPage = false
+            )
+        }
+    }
 
     fun navigateToDetailPage() {
         _uiState.update {
