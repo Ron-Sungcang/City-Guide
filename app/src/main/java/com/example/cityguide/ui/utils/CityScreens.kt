@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -49,12 +50,57 @@ import com.example.cityguide.ui.theme.CityGuideTheme
 
 import java.nio.file.WatchEvent
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CityApp(
 ){
     val viewModel: CityViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
 
+    Scaffold(
+        topBar = {
+            CityAppBar(
+                onBackButtonClick = {},
+                isShowingCityList = uiState.isShowingCityListPage
+            )
+        }
+    ) {innerPadding ->
+        if(uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage){
+            CityList(
+                cities = uiState.categoryList,
+                onClick = {
+                    viewModel.updateCurrentRecommendationsList(uiState.listOfRecommendations[it.id])
+                    viewModel.navigateToListPage()
+                },
+                contentPadding = innerPadding,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = dimensionResource(id = R.dimen.padding_medium),
+                        start = dimensionResource(id = R.dimen.padding_medium),
+                        end = dimensionResource(id = R.dimen.padding_medium)
+                    )
+            )
+        } else if(uiState.isShowingRecommendationListPage){
+            RecommendationList(
+                recommendations = uiState.recommendationList,
+                onClick = {
+                    viewModel.updateCurrentRecommendation(it)
+                    viewModel.navigateToDetailPage()
+                },
+                contentPadding = innerPadding,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = dimensionResource(id = R.dimen.padding_medium),
+                        start = dimensionResource(id = R.dimen.padding_medium),
+                        end = dimensionResource(id = R.dimen.padding_medium)
+                    )
+            )
+        } else {
+
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,6 +169,13 @@ private fun RecommendationList(
             )
         }
     }
+}
+
+@Composable
+fun RecommendationDetails(
+
+){
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

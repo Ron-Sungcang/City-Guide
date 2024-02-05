@@ -12,6 +12,7 @@ class CityViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(
         CityUiState(
             categoryList = CityRepository.getCategories(),
+            listOfRecommendations = CityRepository.getRecommendationData(),
             recommendationList = CityRepository.getRecommendationData().getOrElse(0){
                 CityRepository.defaultRecommendationList
             },
@@ -58,6 +59,7 @@ class CityViewModel: ViewModel() {
 
 data class CityUiState(
     val categoryList: List<City> = emptyList(),
+    val listOfRecommendations: List<List<Recommendation>> = emptyList(),
     val recommendationList: List<Recommendation> = CityRepository.defaultRecommendationList,
     val currentRecommendation: Recommendation = CityRepository.defaultRecommendation,
     val isShowingCityListPage: Boolean = true,
