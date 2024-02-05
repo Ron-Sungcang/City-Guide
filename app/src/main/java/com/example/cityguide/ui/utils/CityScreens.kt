@@ -1,12 +1,17 @@
 package com.example.cityguide.ui.utils
 
+import androidx.activity.compose.BackHandler
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,7 +20,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
@@ -24,36 +31,116 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cityguide.R
 import com.example.cityguide.data.CityRepository
 import com.example.cityguide.model.City
 import com.example.cityguide.model.Recommendation
 import com.example.cityguide.ui.theme.CityGuideTheme
+
 import java.nio.file.WatchEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun CityApp(
+){
+    val viewModel: CityViewModel = viewModel()
+    val uiState by viewModel.uiState.collectAsState()
+
+    Scaffold(
+        topBar = {
+            CityAppBar(
+                currentScreenName = uiState.currentScreen,
+                onBackButtonClick = {
+                    if(uiState.isShowingRecommendationListPage){
+                        viewModel.navigateToCityListPage()
+                    } else if(!uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage){
+                        viewModel.navigateToRecommendedListPage()
+                    }
+                                    },
+                isShowingCityList = uiState.isShowingCityListPage
+            )
+        }
+    ) {innerPadding ->
+        if(uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage){
+            CityList(
+                cities = uiState.categoryList,
+                onClick = {
+                    viewModel.updateCurrentRecommendationsList(
+                        uiState.listOfRecommendations[it.id],
+                        it
+                    )
+                    viewModel.navigateToRecommendedListPage()
+                },
+                contentPadding = innerPadding,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = dimensionResource(id = R.dimen.padding_medium),
+                        start = dimensionResource(id = R.dimen.padding_medium),
+                        end = dimensionResource(id = R.dimen.padding_medium)
+                    )
+            )
+        } else if(uiState.isShowingRecommendationListPage){
+            RecommendationList(
+                recommendations = uiState.recommendationList,
+                onClick = {
+                    viewModel.updateCurrentRecommendation(it)
+                    viewModel.navigateToDetailPage()
+                },
+                onBackButtonClick = {
+                    viewModel.navigateToCityListPage()
+                },
+                contentPadding = innerPadding,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = dimensionResource(id = R.dimen.padding_medium),
+                        start = dimensionResource(id = R.dimen.padding_medium),
+                        end = dimensionResource(id = R.dimen.padding_medium)
+                    )
+            )
+        } else {
+            RecommendationDetails(
+                selectedRecommendation = uiState.currentRecommendation,
+                onBackButtonClick = {viewModel.navigateToRecommendedListPage()},
+                contentPadding = innerPadding
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 private fun CityAppBar(
+    @StringRes currentScreenName: Int,
     onBackButtonClick:() -> Unit,
     isShowingCityList: Boolean,
     modifier: Modifier = Modifier
 ){
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.app_name))},
+        title = { Text(text = stringResource(id = currentScreenName))},
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
@@ -96,9 +183,13 @@ private fun CityList(
 private fun RecommendationList(
     recommendations: List<Recommendation>,
     onClick: (Recommendation) -> Unit,
+    onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ){
+    BackHandler {
+        onBackButtonClick()
+    }
     LazyColumn(
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium)),
@@ -108,6 +199,79 @@ private fun RecommendationList(
             RecommendationListItem(
                 recommendation = recommendation,
                 onItemClick = onClick
+            )
+        }
+    }
+}
+
+@Composable
+fun RecommendationDetails(
+    selectedRecommendation: Recommendation,
+    onBackButtonClick: () -> Unit,
+    contentPadding: PaddingValues,
+    modifier: Modifier = Modifier
+){
+    BackHandler {
+        onBackButtonClick()
+    }
+    val scrollState = rememberScrollState()
+    val layoutDirection = LocalLayoutDirection.current
+    Box(
+        modifier = modifier
+            .verticalScroll(state = scrollState)
+            .padding(top = contentPadding.calculateTopPadding())
+    ){
+        Column(
+            modifier = Modifier
+                .padding(
+                    bottom = contentPadding.calculateTopPadding(),
+                    start = contentPadding.calculateStartPadding(layoutDirection),
+                    end = contentPadding.calculateEndPadding(layoutDirection)
+                )
+        ) {
+            Box {
+                Box {
+                    Image(
+                        painter = painterResource(id = selectedRecommendation.imageRes),
+                        contentDescription = null,
+                        alignment = Alignment.TopCenter,
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                Column(
+                    Modifier
+                        .align(Alignment.BottomStart)
+                        .fillMaxWidth()
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(Color.Transparent, MaterialTheme.colorScheme.scrim),
+                                0f,
+                                400f
+                            )
+                        )
+                ){
+                    Text(
+                        text = stringResource(selectedRecommendation.nameRes),
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.inverseOnSurface,
+                        modifier = Modifier
+                            .padding(horizontal = dimensionResource(R.dimen.padding_small))
+                    )
+                    Text(
+                        text = stringResource(selectedRecommendation.addressRes),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.inverseOnSurface
+                    )
+                }
+            }
+            Text(
+                text = stringResource(selectedRecommendation.descriptionRes),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(
+                    vertical = dimensionResource(R.dimen.padding_detail_content_vertical),
+                    horizontal = dimensionResource(R.dimen.padding_detail_content_horizontal)
+                )
             )
         }
     }
@@ -273,7 +437,22 @@ fun RecommendationListPreview(){
         Surface {
             RecommendationList(
                 recommendations = CityRepository.defaultRecommendationList,
-                onClick = {}
+                onClick = {},
+                onBackButtonClick = {}
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun previewRecommendedDetails(){
+    CityGuideTheme {
+        Surface {
+            RecommendationDetails(
+                selectedRecommendation = CityRepository.defaultRecommendation,
+                onBackButtonClick = {},
+                contentPadding = PaddingValues(0.dp)
             )
         }
     }
