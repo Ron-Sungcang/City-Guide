@@ -13,15 +13,15 @@ object CityRepository {
         return listOf(
             City(
                 id = 0,
-                nameRes = R.string.restaurant,
-                descriptionRes = R.string.restaurantdesc,
-                imageRes = R.drawable.image
-            ),
-            City(
-                id = 1,
                 nameRes = R.string.gym,
                 descriptionRes = R.string.gymdesc,
                 imageRes = R.drawable.gym_structure_1080x675
+            ),
+            City(
+                id = 1,
+                nameRes = R.string.restaurant,
+                descriptionRes = R.string.restaurantdesc,
+                imageRes = R.drawable.image
             ),
             City(
                 id = 2,
@@ -31,16 +31,17 @@ object CityRepository {
             ),
             City(
                 id = 3,
-                nameRes = R.string.kid,
-                descriptionRes = R.string.kiddesc,
-                imageRes = R.drawable.kids_playing
-            ),
-            City(
-                id = 4,
                 nameRes = R.string.park,
                 descriptionRes = R.string.parkdesc,
                 imageRes = R.drawable.parks
             ),
+            City(
+                id = 4,
+                nameRes = R.string.kid,
+                descriptionRes = R.string.kiddesc,
+                imageRes = R.drawable.kids_playing
+            ),
+
             City(id = 5,
                 nameRes = R.string.shop,
                 descriptionRes = R.string.shopdesc,

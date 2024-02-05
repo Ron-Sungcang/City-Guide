@@ -1,6 +1,7 @@
 package com.example.cityguide.ui.utils
 
 import androidx.activity.compose.BackHandler
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -70,7 +71,14 @@ fun CityApp(
     Scaffold(
         topBar = {
             CityAppBar(
-                onBackButtonClick = {},
+                currentScreenName = uiState.currentScreen,
+                onBackButtonClick = {
+                    if(uiState.isShowingRecommendationListPage){
+                        viewModel.navigateToCityListPage()
+                    } else if(!uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage){
+                        viewModel.navigateToRecommendedListPage()
+                    }
+                                    },
                 isShowingCityList = uiState.isShowingCityListPage
             )
         }
@@ -79,8 +87,11 @@ fun CityApp(
             CityList(
                 cities = uiState.categoryList,
                 onClick = {
-                    viewModel.updateCurrentRecommendationsList(uiState.listOfRecommendations[it.id])
-                    viewModel.navigateToListPage()
+                    viewModel.updateCurrentRecommendationsList(
+                        uiState.listOfRecommendations[it.id],
+                        it
+                    )
+                    viewModel.navigateToRecommendedListPage()
                 },
                 contentPadding = innerPadding,
                 modifier = Modifier
@@ -113,7 +124,7 @@ fun CityApp(
         } else {
             RecommendationDetails(
                 selectedRecommendation = uiState.currentRecommendation,
-                onBackButtonClick = {viewModel.navigateToListPage()},
+                onBackButtonClick = {viewModel.navigateToRecommendedListPage()},
                 contentPadding = innerPadding
             )
         }
@@ -123,12 +134,13 @@ fun CityApp(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CityAppBar(
+    @StringRes currentScreenName: Int,
     onBackButtonClick:() -> Unit,
     isShowingCityList: Boolean,
     modifier: Modifier = Modifier
 ){
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.app_name))},
+        title = { Text(text = stringResource(id = currentScreenName))},
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
@@ -176,7 +188,7 @@ private fun RecommendationList(
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ){
     BackHandler {
-        onBackButtonClick
+        onBackButtonClick()
     }
     LazyColumn(
         contentPadding = contentPadding,
@@ -200,7 +212,7 @@ fun RecommendationDetails(
     modifier: Modifier = Modifier
 ){
     BackHandler {
-        onBackButtonClick
+        onBackButtonClick()
     }
     val scrollState = rememberScrollState()
     val layoutDirection = LocalLayoutDirection.current
