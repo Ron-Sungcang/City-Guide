@@ -1,4 +1,4 @@
-package com.example.cityguide.ui.utils
+package com.example.cityguide.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,6 +35,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,9 +47,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -58,15 +56,23 @@ import com.example.cityguide.data.CityRepository
 import com.example.cityguide.model.City
 import com.example.cityguide.model.Recommendation
 import com.example.cityguide.ui.theme.CityGuideTheme
-
-import java.nio.file.WatchEvent
+import com.example.cityguide.ui.utils.CityContentType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CityApp(
+    windowSize: WindowWidthSizeClass,
+    onBackPressed: () -> Unit,
 ){
     val viewModel: CityViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
+    val contentType = when(windowSize){
+        WindowWidthSizeClass.Compact,
+        WindowWidthSizeClass.Medium -> CityContentType.ListOnly
+
+        WindowWidthSizeClass.Expanded -> CityContentType.ListAndDetail
+        else -> CityContentType.ListOnly
+    }
 
     Scaffold(
         topBar = {
@@ -275,6 +281,11 @@ fun RecommendationDetails(
             )
         }
     }
+}
+
+@Composable
+fun RecommendationListAndDetails(){
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
