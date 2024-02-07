@@ -63,10 +63,10 @@ import com.example.cityguide.ui.utils.CityContentType
 fun CityApp(
     windowSize: WindowWidthSizeClass,
     onBackPressed: () -> Unit,
-){
+) {
     val viewModel: CityViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
-    val contentType = when(windowSize){
+    val contentType = when (windowSize) {
         WindowWidthSizeClass.Compact,
         WindowWidthSizeClass.Medium -> CityContentType.ListOnly
 
@@ -79,17 +79,17 @@ fun CityApp(
             CityAppBar(
                 currentScreenName = uiState.currentScreen,
                 onBackButtonClick = {
-                    if(uiState.isShowingRecommendationListPage){
+                    if (uiState.isShowingRecommendationListPage) {
                         viewModel.navigateToCityListPage()
-                    } else if(!uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage){
+                    } else if (!uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage) {
                         viewModel.navigateToRecommendedListPage()
                     }
-                                    },
+                },
                 isShowingCityList = uiState.isShowingCityListPage
             )
         }
-    ) {innerPadding ->
-        if(uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage){
+    ) { innerPadding ->
+        if (uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage) {
             CityList(
                 cities = uiState.categoryList,
                 onClick = {
@@ -108,31 +108,46 @@ fun CityApp(
                         end = dimensionResource(id = R.dimen.padding_medium)
                     )
             )
-        } else if(uiState.isShowingRecommendationListPage){
-            RecommendationList(
-                recommendations = uiState.recommendationList,
-                onClick = {
-                    viewModel.updateCurrentRecommendation(it)
-                    viewModel.navigateToDetailPage()
-                },
-                onBackButtonClick = {
-                    viewModel.navigateToCityListPage()
-                },
-                contentPadding = innerPadding,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = dimensionResource(id = R.dimen.padding_medium),
-                        start = dimensionResource(id = R.dimen.padding_medium),
-                        end = dimensionResource(id = R.dimen.padding_medium)
+        } else if (uiState.isShowingRecommendationListPage) {
+            if (contentType == CityContentType.ListAndDetail) {
+                RecommendationListAndDetails(
+                    recommendations = uiState.recommendationList,
+                    selectedRecommendation = uiState.currentRecommendation,
+                    onClick = {
+                        viewModel.updateCurrentRecommendation(it)
+                    },
+                    onBackButtonClick = {
+                        viewModel.navigateToCityListPage()
+                    })
+            } else {
+                if (contentType == CityContentType.ListOnly){
+                    RecommendationList(
+                        recommendations = uiState.recommendationList,
+                        onClick = {
+                            viewModel.updateCurrentRecommendation(it)
+                            viewModel.navigateToDetailPage()
+                        },
+                        onBackButtonClick = {
+                            viewModel.navigateToCityListPage()
+                        },
+                        contentPadding = innerPadding,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = dimensionResource(id = R.dimen.padding_medium),
+                                start = dimensionResource(id = R.dimen.padding_medium),
+                                end = dimensionResource(id = R.dimen.padding_medium)
+                            )
                     )
-            )
-        } else {
-            RecommendationDetails(
-                selectedRecommendation = uiState.currentRecommendation,
-                onBackButtonClick = {viewModel.navigateToRecommendedListPage()},
-                contentPadding = innerPadding
-            )
+                }
+                else {
+                    RecommendationDetails(
+                        selectedRecommendation = uiState.currentRecommendation,
+                        onBackButtonClick = { viewModel.navigateToRecommendedListPage() },
+                        contentPadding = innerPadding
+                    )
+                }
+            }
         }
     }
 }
