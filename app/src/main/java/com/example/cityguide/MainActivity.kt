@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.cityguide.ui.theme.CityGuideTheme
 import com.example.cityguide.ui.CityApp
 
@@ -20,3 +22,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+@Preview(showBackground = true, widthDp = 1000)
+@Composable
+fun CityAppExpandedPreview() {
+    CityGuideTheme {
+        Surface {
+
+        }
+    }
+}
+..

@@ -284,8 +284,37 @@ fun RecommendationDetails(
 }
 
 @Composable
-fun RecommendationListAndDetails(){
-
+fun RecommendationListAndDetails(
+    recommendations: List<Recommendation>,
+    selectedRecommendation: Recommendation,
+    onClick: (Recommendation) -> Unit,
+    onBackButtonClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
+){
+    Row(
+        modifier = modifier
+    ){
+        RecommendationList(
+            recommendations = recommendations,
+            onClick = onClick,
+            contentPadding = PaddingValues(
+                top = contentPadding.calculateTopPadding()
+            ),
+            modifier = Modifier
+                .weight(2f)
+                .padding(horizontal = dimensionResource(id = R.dimen.padding_medium)),
+            onBackButtonClick = onBackButtonClick
+        )
+        RecommendationDetails(
+            selectedRecommendation = selectedRecommendation,
+            modifier = Modifier.weight(3f),
+            onBackButtonClick = onBackButtonClick,
+            contentPadding = PaddingValues(
+                top = contentPadding.calculateTopPadding()
+            )
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -468,3 +497,4 @@ fun previewRecommendedDetails(){
         }
     }
 }
+
