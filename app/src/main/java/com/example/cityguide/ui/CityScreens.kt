@@ -82,6 +82,7 @@ fun CityApp(
                     if (uiState.isShowingRecommendationListPage) {
                         viewModel.navigateToCityListPage()
                     } else if (!uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage) {
+                        viewModel.updateCurrentRecommendationsList(uiState.recommendationList, uiState.currentCity)
                         viewModel.navigateToRecommendedListPage()
                     }
                 },
@@ -100,6 +101,7 @@ fun CityApp(
                     viewModel.navigateToRecommendedListPage()
                 },
                 contentPadding = innerPadding,
+                onBackButtonClick = onBackPressed,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -108,19 +110,22 @@ fun CityApp(
                         end = dimensionResource(id = R.dimen.padding_medium)
                     )
             )
-        } else if (uiState.isShowingRecommendationListPage) {
-            if (contentType == CityContentType.ListAndDetail) {
-                RecommendationListAndDetails(
-                    recommendations = uiState.recommendationList,
-                    selectedRecommendation = uiState.currentRecommendation,
-                    onClick = {
-                        viewModel.updateCurrentRecommendation(it)
-                    },
-                    onBackButtonClick = {
-                        viewModel.navigateToCityListPage()
-                    })
-            } else {
-                if (contentType == CityContentType.ListOnly){
+        } else if (contentType == CityContentType.ListAndDetail && uiState.isShowingRecommendationListPage) {
+            RecommendationListAndDetails(
+                recommendations = uiState.recommendationList,
+                selectedRecommendation = uiState.currentRecommendation,
+                onClick = {
+                    viewModel.updateCurrentRecommendation(it)
+                },
+                onBackButtonClick = {
+                    viewModel.navigateToCityListPage()
+                },
+                contentPadding = innerPadding,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+           else {
+                if(uiState.isShowingRecommendationListPage) {
                     RecommendationList(
                         recommendations = uiState.recommendationList,
                         onClick = {
@@ -143,14 +148,16 @@ fun CityApp(
                 else {
                     RecommendationDetails(
                         selectedRecommendation = uiState.currentRecommendation,
-                        onBackButtonClick = { viewModel.navigateToRecommendedListPage() },
+                        onBackButtonClick = {
+                            viewModel.updateCurrentRecommendationsList(uiState.recommendationList, uiState.currentCity)
+                            viewModel.navigateToRecommendedListPage() },
                         contentPadding = innerPadding
                     )
                 }
             }
         }
     }
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -182,10 +189,14 @@ private fun CityAppBar(
 @Composable
 private fun CityList(
     cities: List<City>,
+    onBackButtonClick: () -> Unit,
     onClick: (City) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ){
+    BackHandler {
+        onBackButtonClick()
+    }
     LazyColumn(
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
@@ -479,7 +490,8 @@ fun CityListPreview() {
         Surface {
             CityList(
                 cities = CityRepository.getCategories(),
-                onClick = {}
+                onClick = {},
+                onBackButtonClick = {}
             )
         }
     }

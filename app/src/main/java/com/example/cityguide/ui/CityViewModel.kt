@@ -60,7 +60,7 @@ class CityViewModel: ViewModel() {
         _uiState.update {
             it.copy(
                 isShowingCityListPage = false,
-                isShowingRecommendationListPage = true
+                isShowingRecommendationListPage = true,
             )
         }
     }
