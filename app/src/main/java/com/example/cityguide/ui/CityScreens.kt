@@ -1,4 +1,4 @@
-package com.example.cityguide.ui.utils
+package com.example.cityguide.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,6 +35,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,9 +47,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -58,32 +56,41 @@ import com.example.cityguide.data.CityRepository
 import com.example.cityguide.model.City
 import com.example.cityguide.model.Recommendation
 import com.example.cityguide.ui.theme.CityGuideTheme
-
-import java.nio.file.WatchEvent
+import com.example.cityguide.ui.utils.CityContentType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CityApp(
-){
+    windowSize: WindowWidthSizeClass,
+    onBackPressed: () -> Unit,
+) {
     val viewModel: CityViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
+    val contentType = when (windowSize) {
+        WindowWidthSizeClass.Compact,
+        WindowWidthSizeClass.Medium -> CityContentType.ListOnly
+
+        WindowWidthSizeClass.Expanded -> CityContentType.ListAndDetail
+        else -> CityContentType.ListOnly
+    }
 
     Scaffold(
         topBar = {
             CityAppBar(
                 currentScreenName = uiState.currentScreen,
                 onBackButtonClick = {
-                    if(uiState.isShowingRecommendationListPage){
+                    if (uiState.isShowingRecommendationListPage) {
                         viewModel.navigateToCityListPage()
-                    } else if(!uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage){
+                    } else if (!uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage) {
+                        viewModel.updateCurrentRecommendationsList(uiState.recommendationList, uiState.currentCity)
                         viewModel.navigateToRecommendedListPage()
                     }
-                                    },
+                },
                 isShowingCityList = uiState.isShowingCityListPage
             )
         }
-    ) {innerPadding ->
-        if(uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage){
+    ) { innerPadding ->
+        if (uiState.isShowingCityListPage && !uiState.isShowingRecommendationListPage) {
             CityList(
                 cities = uiState.categoryList,
                 onClick = {
@@ -94,6 +101,7 @@ fun CityApp(
                     viewModel.navigateToRecommendedListPage()
                 },
                 contentPadding = innerPadding,
+                onBackButtonClick = onBackPressed,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -102,34 +110,54 @@ fun CityApp(
                         end = dimensionResource(id = R.dimen.padding_medium)
                     )
             )
-        } else if(uiState.isShowingRecommendationListPage){
-            RecommendationList(
+        } else if (contentType == CityContentType.ListAndDetail && uiState.isShowingRecommendationListPage) {
+            RecommendationListAndDetails(
                 recommendations = uiState.recommendationList,
+                selectedRecommendation = uiState.currentRecommendation,
                 onClick = {
                     viewModel.updateCurrentRecommendation(it)
-                    viewModel.navigateToDetailPage()
                 },
                 onBackButtonClick = {
                     viewModel.navigateToCityListPage()
                 },
                 contentPadding = innerPadding,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = dimensionResource(id = R.dimen.padding_medium),
-                        start = dimensionResource(id = R.dimen.padding_medium),
-                        end = dimensionResource(id = R.dimen.padding_medium)
-                    )
-            )
-        } else {
-            RecommendationDetails(
-                selectedRecommendation = uiState.currentRecommendation,
-                onBackButtonClick = {viewModel.navigateToRecommendedListPage()},
-                contentPadding = innerPadding
+                modifier = Modifier.fillMaxWidth()
             )
         }
+           else {
+                if(uiState.isShowingRecommendationListPage) {
+                    RecommendationList(
+                        recommendations = uiState.recommendationList,
+                        onClick = {
+                            viewModel.updateCurrentRecommendation(it)
+                            viewModel.navigateToDetailPage()
+                        },
+                        onBackButtonClick = {
+                            viewModel.navigateToCityListPage()
+                        },
+                        contentPadding = innerPadding,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = dimensionResource(id = R.dimen.padding_medium),
+                                start = dimensionResource(id = R.dimen.padding_medium),
+                                end = dimensionResource(id = R.dimen.padding_medium)
+                            )
+                    )
+                }
+                else {
+                    RecommendationDetails(
+                        selectedRecommendation = uiState.currentRecommendation,
+                        onBackButtonClick = {
+                            viewModel.updateCurrentRecommendationsList(uiState.recommendationList, uiState.currentCity)
+                            viewModel.navigateToRecommendedListPage() },
+                        contentPadding = innerPadding
+                    )
+                }
+            }
+        }
     }
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -161,10 +189,14 @@ private fun CityAppBar(
 @Composable
 private fun CityList(
     cities: List<City>,
+    onBackButtonClick: () -> Unit,
     onClick: (City) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ){
+    BackHandler {
+        onBackButtonClick()
+    }
     LazyColumn(
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
@@ -274,6 +306,40 @@ fun RecommendationDetails(
                 )
             )
         }
+    }
+}
+
+@Composable
+fun RecommendationListAndDetails(
+    recommendations: List<Recommendation>,
+    selectedRecommendation: Recommendation,
+    onClick: (Recommendation) -> Unit,
+    onBackButtonClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
+){
+    Row(
+        modifier = modifier
+    ){
+        RecommendationList(
+            recommendations = recommendations,
+            onClick = onClick,
+            contentPadding = PaddingValues(
+                top = contentPadding.calculateTopPadding()
+            ),
+            modifier = Modifier
+                .weight(2f)
+                .padding(horizontal = dimensionResource(id = R.dimen.padding_medium)),
+            onBackButtonClick = onBackButtonClick
+        )
+        RecommendationDetails(
+            selectedRecommendation = selectedRecommendation,
+            modifier = Modifier.weight(3f),
+            onBackButtonClick = onBackButtonClick,
+            contentPadding = PaddingValues(
+                top = contentPadding.calculateTopPadding()
+            )
+        )
     }
 }
 
@@ -424,7 +490,8 @@ fun CityListPreview() {
         Surface {
             CityList(
                 cities = CityRepository.getCategories(),
-                onClick = {}
+                onClick = {},
+                onBackButtonClick = {}
             )
         }
     }
@@ -457,3 +524,4 @@ fun previewRecommendedDetails(){
         }
     }
 }
+

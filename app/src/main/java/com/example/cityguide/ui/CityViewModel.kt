@@ -1,6 +1,5 @@
-package com.example.cityguide.ui.utils
+package com.example.cityguide.ui
 
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import com.example.cityguide.R
 import com.example.cityguide.data.CityRepository
@@ -61,7 +60,7 @@ class CityViewModel: ViewModel() {
         _uiState.update {
             it.copy(
                 isShowingCityListPage = false,
-                isShowingRecommendationListPage = true
+                isShowingRecommendationListPage = true,
             )
         }
     }
